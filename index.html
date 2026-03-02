@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub-Coder-xu | Java Developer</title>
+  <meta name="description" content="Java Developer | Backend Engineer | Open Source Enthusiast">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== CSS 变量 ===== */
+    :root {
+      --bg-deep: #030308;
+      --bg-primary: #080810;
+      --bg-secondary: #0c0c18;
+      --bg-card: rgba(14, 14, 24, 0.7);
+      --bg-card-hover: rgba(18, 18, 32, 0.85);
+      --accent: #3b82f6;
+      --accent-secondary: #6366f1;
+      --accent-tertiary: #a855f7;
+      --accent-cyan: #06b6d4;
+      --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #d946ef 100%);
+      --accent-glow: rgba(59, 130, 246, 0.2);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: rgba(255, 255, 255, 0.05);
+      --border-hover: rgba(255, 255, 255, 0.12);
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== 背景系统 ===== */
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .bg-gradient-center {
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1200px;
+      height: 800px;
+      background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      pointer-events: none;
+      animation: float 15s ease-in-out infinite;
+    }
+    
+    .bg-orb-1 { width: 500px; height: 500px; top: 5%; right: -100px; background: var(--accent); animation-delay: 0s; }
+    .bg-orb-2 { width: 400px; height: 400px; bottom: 15%; left: -50px; background: var(--accent-tertiary); animation-delay: -5s; }
+    .bg-orb-3 { width: 300px; height: 300px; top: 50%; left: 30%; background: var(--accent-secondary); animation-delay: -10s; }
+    .bg-orb-4 { width: 250px; height: 250px; top: 20%; left: 60%; background: var(--accent-cyan); animation-delay: -7s; }
+    
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -40px) scale(1.05); }
+      66% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+    
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(ellipse 70% 50% at 50% 30%, black 10%, transparent 70%);
+    }
+
+    /* ===== 导航栏 ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8, 8, 16, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .nav-logo {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+    
+    .nav-cta {
+      padding: 10px 20px;
+      background: var(--accent-gradient);
+      border: none;
+      border-radius: 20px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+    }
+
+    /* ===== 主容器 ===== */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 120px 20px 100px;
+    }
+
+    /* ===== 头部 ===== */
+    .hero {
+      text-align: center;
+      padding: 40px 0 60px;
+      position: relative;
+    }
+    
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      animation: fadeInDown 0.6s ease-out;
+    }
+    
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .avatar-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 28px;
+      animation: fadeInUp 0.6s ease-out 0.1s backwards;
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: var(--radius-xl);
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 700;
+      color: white;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.4), 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+    
+    .avatar-glow {
+      position: absolute;
+      inset: -20px;
+      border-radius: var(--radius-xl);
+      background: var(--accent-gradient);
+      filter: blur(30px);
+      opacity: 0.4;
+      z-index: 1;
+      animation: pulse-glow 4s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.05); }
+    }
+    
+    .hero h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeInUp 0.6s ease-out 0.2s backwards;
+    }
+    
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      animation: fadeInUp 0.6s ease-out 0.3s backwards;
+    }
+    
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      animation: fadeInUp 0.6s ease-out 0.4s backwards;
+    }
+    
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.3s;
+    }
+    
+    .hero-meta-item:hover { color: var(--accent); }
+
+    /* ===== 卡片 ===== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(20px);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.6s ease-out backwards;
+    }
+    
+    .card:nth-child(1) { animation-delay: 0.2s; }
+    .card:nth-child(2) { animation-delay: 0.3s; }
+    .card:nth-child(3) { animation-delay: 0.4s; }
+    .card:nth-child(4) { animation-delay: 0.5s; }
+    .card:nth-child(5) { animation-delay: 0.6s; }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    }
+    
+    /* 滚动显示 */
+.card.visible { opacity: 1 !important; transform: translateY(0) !important; }
+
+.card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(59, 130, 246, 0.1);
+    }
+    
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .card-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    /* ===== 关于 ===== */
+    .about-text { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.85; }
+    .about-text .highlight { background: var(--accent-glow); padding: 2px 8px; border-radius: 4px; color: var(--accent); font-weight: 500; }
+
+    /* ===== 技能 ===== */
+    .skills-section { display: flex; flex-direction: column; gap: 16px; }
+    .skill-category { display: flex; flex-direction: column; gap: 10px; }
+    .skill-category-label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+    
+    .skill-tag {
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border);
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      transition: all 0.25s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .skill-tag::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .skill-tag:hover::before { left: 100%; }
+    .skill-tag:hover { background: var(--accent-glow); border-color: rgba(59, 130, 246, 0.3); color: var(--text-primary); transform: translateY(-2px); }
+    .skill-tag.primary { background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15)); border-color: rgba(59, 130, 246, 0.3); color: var(--accent); }
+    .skill-tag.primary:hover { background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(139, 92, 246, 0.25)); }
+
+    /* ===== 项目 ===== */
+    .project-list { display: flex; flex-direction: column; gap: 14px; }
+    .project-item {
+      padding: 22px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%);
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .project-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+      transition: left 0.5s;
+    }
+    
+    .project-item:hover::after { left: 100%; }
+    .project-item:hover { background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.03) 100%); border-color: var(--border-hover); }
+    .project-item h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+    .project-arrow { margin-left: auto; color: var(--text-muted); opacity: 0; transform: translateX(-10px); transition: all 0.3s; }
+    .project-item:hover .project-arrow { opacity: 1; transform: translateX(0); }
+    .project-item p { color: var(--text-muted); font-size: 0.875rem; }
+    .project-tags { display: flex; gap: 8px; margin-top: 12px; }
+    .project-tag { font-size: 0.7rem; padding: 4px 10px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); color: var(--accent); }
+
+    /* ===== 链接 ===== */
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .link-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent-gradient);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .link-card:hover::before { opacity: 1; }
+    .link/* 滚动显示 */
+.card.visible { opacity: 1 !important; transform: translateY(0) !important; }
+
+.card:hover { background: var(--accent-glow); border-color: rgba(59, 130, 246, 0.3); color: var(--text-primary); transform: translateX(4px); }
+    .link-icon { font-size: 22px; }
+    .link-text { font-size: 0.95rem; font-weight: 500; }
+
+    /* ===== 页脚 ===== */
+    footer {
+      text-align: center;
+      padding: 60px 0 40px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    
+    footer a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--text-primary); }
+    .footer-decoration { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 20px; }
+    .footer-line { width: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--border-hover), transparent); }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+      .nav { padding: 12px 20px; }
+      .nav-links { display: none; }
+      .container { padding: 100px 16px 80px; }
+      .hero h1 { font-size: 2.2rem; }
+      .avatar { width: 110px; height: 110px; font-size: 40px; }
+      .card { padding: 24px; }
+      .hero-meta { flex-direction: column; gap: 8px; }
+      .links-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 背景 -->
+  <div class="bg-canvas">
+    <div class="bg-gradient-center"></div>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="bg-orb bg-orb-4"></div>
+    <div class="bg-grid"></div>
+  </div>
+
+  <!-- 导航栏 -->
+  <nav class="nav">
+    <div class="nav-logo">GitHub-Coder-xu</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-cta">Hire Me</button>
+  </nav>
+
+  <div class="container">
+    <!-- 头部 -->
+    <section class="hero">
+      <div class="hero-badge">
+        <span>✨</span>
+        <span>Available for work</span>
+      </div>
+      
+      <div class="avatar-container">
+        <div class="avatar-glow"></div>
+        <div class="avatar">GX</div>
+      </div>
+      
+      <h1>GitHub-Coder-xu</h1>
+      <p class="hero-title">Java 开发工程师</p>
+      
+      <div class="hero-meta">
+        <span class="hero-meta-item"><span>📍</span><span>北京</span></span>
+        <span class="hero-meta-item"><span>💼</span><span>后端开发</span></span>
+        <span class="hero-meta-item"><span>🚀</span><span>开源爱好者</span></span>
+      </div>
+    </section>
+
+    <!-- 关于 -->
+    <section class="card" id="about">
+      <div class="card-header">
+        <div class="card-icon">👋</div>
+        <h2 class="card-title">关于我</h2>
+      </div>
+      <p class="about-text">
+        后端开发工程师，专注 <span class="highlight">Java 技术栈</span>。
+        具备良好的代码习惯和工程化意识，熟悉微服务架构设计与实现。
+        热爱<span class="highlight">开源技术</span>，持续学习新技术中，
+        追求高质量代码和优雅的解决方案。
+      </p>
+    </section>
+
+    <!-- 技术栈 -->
+    <section class="card" id="skills">
+      <div class=" <div class="card-header">
+<div class="card-icon">⚡</div>
+        <h2 class="card-title">技术栈</h2>
+      </div>
+      
+      <div class="skills-section">
+        <div class="skill-category">
+          <span class="skill-category-label">核心技能</span>
+          <div class="skills-grid">
+            <span class="skill-tag primary">Java</span>
+            <span class="skill-tag primary">Spring Boot</span>
+            <span class="skill-tag primary">Spring Cloud</span>
+            <span class="skill-tag primary">微服务</span>
+          </div>
+        </div>
+        
+        <div class="skill-category">
+          <span class="skill-category-label">数据库与缓存</span>
+          <div class="skills-grid">
+            <span class="skill-tag">MySQL</span>
+            <span class="skill-tag">Redis</span>
+            <span class="skill-tag">MongoDB</span>
+            <span class="skill-tag">RabbitMQ</span>
+          </div>
+        </div>
+        
+        <div class="skill-category">
+          <span class="skill-category-label">DevOps</span>
+          <div class="skills-grid">
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">Kubernetes</span>
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">CI/CD</span>
+          </div>
+        </div>
+        
+        <div class="skill-category">
+          <span class="skill-category-label">工具</span>
+          <div class="skills-grid">
+            <span class="skill-tag">IDEA</span>
+            <span class="skill-tag">Maven</span>
+            <span class="skill-tag">Linux</span>
+            <span class="skill-tag">Nginx</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 项目 -->
+    <section class="card" id="projects">
+      <div class="card-header">
+        <div class="card-icon">🚀</div>
+        <h2 class="card-title">项目展示</h2>
+      </div>
+      
+      <div class="project-list">
+        <div class="project-item">
+          <h3>
+            <span>待添加项目...</span>
+            <span class="project-arrow">→</span>
+          </h3>
+          <p>在这里展示你的项目经历</p>
+          <div class="project-tags">
+            <span class="project-tag">Java</span>
+            <span class="project-tag">Spring Boot</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联系方式 -->
+
+    <!-- OpenClaw 相关 -->
+    <section class="card" id="openclaw">
+      <div class="card-header">
+        <div class="card-icon">🦞</div>
+        <h2 class="card-title">OpenClaw 生态</h2>
+      </div>
+      
+      <div class="project-list">
+        <div class="project-item">
+          <h3><span>🤖 OpenClaw</span><span class="project-arrow">→</span></h3>
+          <p>AI Agent 操作系统 - 开源的 AI 助手开发框架</p>
+          <div class="project-tags">
+            <span class="project-tag">AI Agent</span>
+            <span class="project-tag">Open Source</span>
+          </div>
+        </div>
+        
+        <div class="project-item">
+          <h3><span>🧠 memU</span><span class="project-arrow">→</span></h3>
+          <p>24/7 主动型 AI Agent 记忆系统 (12k+ stars)</p>
+          <div class="project-tags">
+            <span class="project-tag">Memory</span>
+            <span class="project-tag">Proactive</span>
+          </div>
+        </div>
+        
+        <div class="project-item">
+          <h3><span>🎯 ClawRouter</span><span class="project-arrow">→</span></h3>
+          <p>Agent 原生 LLM 路由 (3.7k+ stars)</p>
+          <div class="project-tags">
+            <span class="project-tag">LLM Router</span>
+            <span class="project-tag">BlockRunAI</span>
+          </div>
+        </div>
+        
+        <div class="project-item">
+          <h3><span>🏗️ antfarm</span><span class="project-arrow">→</span></h3>
+          <p>一键构建 AI Agent 团队 (1.7k+ stars)</p>
+          <div class="project-tags">
+            <span class="project-tag">Multi-Agent</span>
+            <span class="project-tag">Snarktank</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="card" id="contact">
+      <div class="card-header">
+        <div class="card-icon">🔗</div>
+        <h2 class="card-title">联系方式</h2>
+      </div>
+      
+      <div class="links-grid">
+        <a href="https://github.com/GitHub-Coder-xu" class="link-card" target="_blank">
+          <span class="link-icon">📂</span>
+          <span class="link-text">GitHub</span>
+        </a>
+        <a href="mailto:example@email.com" class="link-card">
+          <span class="link-icon">📧</span>
+          <span class="link-text">Email</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+      <div class="footer-decoration">
+        <span class="footer-line"></span>
+        <span>🦞</span>
+        <span class="footer-line"></span>
+      </div>
+      <p>© 2026 GitHub-Coder-xu · Built with passion</p>
+    </footer>
+  </div>
+  <script>
+    // 滚动动画
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }); }, observerOptions);
+    document.querySelectorAll('.card').forEach(card => { card.style.opacity = '0'; card.style.transform = 'translateY(30px)'; card.style.transition = 'opacity 0.6s ease, transform 0.6s ease'; observer.observe(card); });
+    // 鼠标跟随
+    document.addEventListener('mousemove', (e) => { const x = (e.clientX / window.innerWidth - 0.5) * 20; const y = (e.clientY / window.innerHeight - 0.5) * 20; document.querySelectorAll('.bg-orb').forEach(orb => { orb.style.transform = `translate(${x}px, ${y}px)`; }); });
+  </script>
+</body>
+</html>
